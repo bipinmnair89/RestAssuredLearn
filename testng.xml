@@ -4,8 +4,9 @@
     <test verbose="2" preserve-order="true" name="D:/Automation/Workspace/RestAssuredLearn">
         <classes>
 <!--            <class name="org.tmb.learn.GetRequestTest"></class>-->
-            <class name="org.tmb.learn.POSTRequestTest"></class>
-<!--            <class name="org.tmb.learn.TestSeleniumManager"></class>-->
+<!--            <class name="org.tmb.learn.POSTRequestTest"></class>-->
+            <class name="org.tmb.learn.PUTandDELETERequestTest"></class>
+            <!--            <class name="org.tmb.learn.TestSeleniumManager"></class>-->
         </classes>
     </test>
 </suite>
