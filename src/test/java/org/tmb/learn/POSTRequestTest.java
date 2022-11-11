@@ -1,22 +1,18 @@
 package org.tmb.learn;
 
+import static io.restassured.RestAssured.*;
 import com.github.javafaker.Faker;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
-import org.testng.Assert;
 import org.tmb.lomboktest.EmpLombok;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
 
 public class POSTRequestTest {
 
@@ -89,7 +85,7 @@ public class POSTRequestTest {
     public void testPOSTReqUsingMapandList() {
         Faker faker=new Faker(new Locale("IN"));
         Map<String,Object> mapMain = new LinkedHashMap<>();
-        mapMain.put("id",faker.number().numberBetween(1,20));
+        mapMain.put("id",faker.number().numberBetween(1,50));
         mapMain.put("first_name",faker.name().firstName());
         mapMain.put("last_name",faker.name().lastName());
         mapMain.put("email",String.valueOf(faker.name().firstName())+"@gmail.com");
@@ -161,7 +157,7 @@ public class POSTRequestTest {
         RoleTenure roleTenure1 = new RoleTenure(roleA,"2015 to 2019");
         RoleTenure roleTenure2 = new RoleTenure(roleB,"2019 to 2022");
 
-        Employee employee = new Employee(   faker.number().numberBetween(1,20),
+        Employee employee = new Employee(   faker.number().numberBetween(1,80),
                                             faker.name().firstName(),
                                             faker.name().lastName(),
                                       faker.name().firstName()+"@gmail.com",
@@ -183,7 +179,7 @@ public class POSTRequestTest {
         String roleA=faker.job().title();
         String roleB=faker.job().title();
 
-        EmpLombok empLok = new EmpLombok(   faker.number().numberBetween(1,20),
+        EmpLombok empLok = new EmpLombok(   faker.number().numberBetween(1,2000),
                                             faker.name().firstName(),
                                             faker.name().lastName(),
                                       faker.name().firstName()+"@gmail.com",
@@ -198,4 +194,28 @@ public class POSTRequestTest {
         response.prettyPrint();
         response.then().statusCode(201);
     }
+
+    @Test(priority = 2, enabled = false)
+    public void testPOSTReqUsingPOJOandLombokForJSONAnnotations() {
+        Faker faker=new Faker();
+        String roleA=faker.job().title();
+        String roleB=faker.job().title();
+
+        EmpLombok empLok = new EmpLombok(   faker.number().numberBetween(1,2000),
+                                            null,
+                                            "",
+                                            faker.name().firstName()+"@gmail.com",
+                                            Arrays.asList(roleA,roleB));
+        Response response = given().
+                baseUri("http://localhost:3000").
+                header("Content-Type", ContentType.JSON).
+                body(empLok).
+                when().
+                log().all().
+                post("/employees");
+        response.prettyPrint();
+        response.then().statusCode(201);
+    }
+
+
 }
